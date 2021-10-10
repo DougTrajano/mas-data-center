@@ -11,14 +11,14 @@
     <structural-specification>
  
         <role-definitions>
-			 <role id="miner" />
-			 <role id="leader" />
+			 <role id="technician" />
+			 <role id="manager" />
 		</role-definitions>
 
-        <group-specification id="DataCenterGroup">
+        <group-specification id="dcGroup">
             <roles>
-                <role id="miner"/>
-                <role id="leader"/>
+                <role id="technician"/>
+                <role id="manager"/>
             </roles>
         </group-specification>
 
@@ -29,16 +29,16 @@
         <scheme id="data_center_sch" >
             <goal id="winning">
 		     <plan operator="parallel">
-		       <goal id="miner" />
+		       <goal id="technician" />
 		       <goal id="dropped" />
 		     </plan>
 		   </goal>
 
-            <mission id="mMiner" min="1" max="1">
+            <mission id="mTechnician" min="1" max="1">
                 <goal id="winning"/>
             </mission>
 
-            <mission id="mLeader" min="1" max="1">
+            <mission id="mManager" min="1" max="1">
                 <goal id="dropped"/>
             </mission>
         </scheme>
@@ -46,8 +46,8 @@
     </functional-specification>
 
     <normative-specification>
-	  <norm id="n1"  type="permission"   role="miner"   mission="mMiner" />
-	  <norm id="n2"  type="obligation"   role="leader"  mission="mLeader" />
+	  <norm id="n1"  type="permission"   role="technician"   mission="mTechnician" />
+	  <norm id="n2"  type="obligation"   role="manager"  mission="mManager" />
 	</normative-specification>
 
 </organisational-specification>

@@ -1,0 +1,135 @@
+[Moise] Workspace dcOrg created.
+[Moise] getJoinedWorkspaces: [dcOrg]
+[Moise] scheme created: data_center_schema: data_center_sch using artifact SchemeBoard
+[Moise] group created: techGrp: dcGroup using artifact ora4mas.nopl.GroupBoard
+[Cartago] Workspace data_center created.
+[Cartago] getJoinedWorkspaces: [main]
+[Cartago] artifact m1view: data_center.DataCenterPlanet(1,0) at data_center created.
+[Cartago] artifact m2view: data_center.DataCenterPlanet(1,1) at data_center created.
+[Cartago] artifact redTeamMap: data_center.WorldMap("TeamRed") at data_center created.
+[Cartago] artifact greenTeamMap: data_center.WorldMap("TeamGreen") at data_center created.
+[Cartago] artifact m4view: data_center.DataCenterPlanet(1,3) at data_center created.
+[Cartago] artifact pinkTeamMap: data_center.WorldMap("TeamPink") at data_center created.
+[Cartago] artifact m3view: data_center.DataCenterPlanet(1,2) at data_center created.
+[Cartago] artifact orangeTeamMap: data_center.WorldMap("TeamOrange") at data_center created.
+[orangeTechnician] joinned workspace data_center
+[redTechnician] joinned workspace data_center
+[orangeTechnician] joinned workspace dcOrg
+[orangeTechnician] focusing on artifact m2view (at workspace data_center) using namespace default
+[redTechnician] joinned workspace dcOrg
+[manager] joinned workspace dcOrg
+[redTechnician] focusing on artifact m3view (at workspace data_center) using namespace default
+[manager] focusing on artifact techGrp (at workspace dcOrg) using namespace default
+[pinkTechnician] joinned workspace data_center
+[orangeTechnician] focusing on artifact orangeTeamMap (at workspace data_center) using namespace default
+[redTechnician] focusing on artifact redTeamMap (at workspace data_center) using namespace default
+[pinkTechnician] joinned workspace dcOrg
+[greenTechnician] joinned workspace data_center
+[manager] focusing on artifact dcOrg (at workspace dcOrg) using namespace default
+[pinkTechnician] focusing on artifact m1view (at workspace data_center) using namespace default
+[greenTechnician] joinned workspace dcOrg
+[greenTechnician] focusing on artifact m4view (at workspace data_center) using namespace default
+[pinkTechnician] focusing on artifact pinkTeamMap (at workspace data_center) using namespace default
+[greenTechnician] focusing on artifact greenTeamMap (at workspace data_center) using namespace default
+[redTechnician] focusing on artifact techGrp (at workspace dcOrg) using namespace default
+[orangeTechnician] focusing on artifact techGrp (at workspace dcOrg) using namespace default
+[pinkTechnician] focusing on artifact techGrp (at workspace dcOrg) using namespace default
+[redTechnician] focusing on artifact dcOrg (at workspace dcOrg) using namespace default
+[pinkTechnician] focusing on artifact dcOrg (at workspace dcOrg) using namespace default
+[greenTechnician] focusing on artifact techGrp (at workspace dcOrg) using namespace default
+[redTechnician] I am near to [6,29]
+[redTechnician] No fail event was generated for +!jcm::initial_roles([role(dcOrg,"local",techGrp,technician)],5)
+[redTechnician] Found a goal for which there is no relevant plan: +!jcm::initial_roles([role(dcOrg,"local",techGrp,technician)],5)
+[greenTechnician] focusing on artifact dcOrg (at workspace dcOrg) using namespace default
+[pinkTechnician] No fail event was generated for +!jcm::initial_roles([role(dcOrg,"local",techGrp,technician)],5)
+[pinkTechnician] Found a goal for which there is no relevant plan: +!jcm::initial_roles([role(dcOrg,"local",techGrp,technician)],5)
+[greenTechnician] I am near to [7,5]
+[greenTechnician] No fail event was generated for +!jcm::initial_roles([role(dcOrg,"local",techGrp,technician)],5)
+[greenTechnician] Found a goal for which there is no relevant plan: +!jcm::initial_roles([role(dcOrg,"local",techGrp,technician)],5)
+[greenTechnician] No failure event was generated for +!start[code(lookupArtifact("greenTeamMap",_309)),code_line(8),code_src("technician_green.asl"),error(action_failed),error_msg("cartago.ArtifactNotAvailableException"),source(self)]
+intention 14: 
+    +!start[source(self)] <- ... lookupArtifact(MapName,MapId); .print("MapName: ",MapName); focus(MapId) / {MapName="greenTeamMap", T="green"}
+
+[pinkTechnician] No failure event was generated for +!start[code(lookupArtifact("pinkTeamMap",_311)),code_line(19),code_src("technician_pink.asl"),error(action_failed),error_msg("cartago.ArtifactNotAvailableException"),source(self)]
+intention 11: 
+    +!start[source(self)] <- ... lookupArtifact(MapName,MapId); .print("MapName: ",MapName) / {AgY=0, MapName="pinkTeamMap", AgX=0, T="pink"}
+
+[redTechnician] No failure event was generated for +!start[code(lookupArtifact("redTeamMap",_312)),code_line(9),code_src("technician_red.asl"),error(action_failed),error_msg("cartago.ArtifactNotAvailableException"),source(self)]
+intention 9: 
+    +!start[source(self)] <- ... lookupArtifact(MapName,MapId); .print("MapName: ",MapName) / {MapName="redTeamMap", T="red"}
+
+[orangeTechnician] focusing on artifact dcOrg (at workspace dcOrg) using namespace default
+[orangeTechnician] I am near to [26,4]
+[orangeTechnician] No fail event was generated for +!jcm::initial_roles([role(dcOrg,"local",techGrp,technician)],5)
+[orangeTechnician] Found a goal for which there is no relevant plan: +!jcm::initial_roles([role(dcOrg,"local",techGrp,technician)],5)
+[orangeTechnician] No failure event was generated for +!start[code(lookupArtifact("orangeTeamMap",_319)),code_line(8),code_src("technician_orange.asl"),error(action_failed),error_msg("cartago.ArtifactNotAvailableException"),source(self)]
+intention 16: 
+    +!start[source(self)] <- ... lookupArtifact(MapName,MapId); .print("MapName: ",MapName) / {MapName="orangeTeamMap", T="orange"}
+
+[greenTechnician] I saw server in: gold(25,23)
+[greenTechnician] Leave desires and intentions to seek gold(25,23)
+[greenTechnician] I'm going to gold(25,23)
+[greenTechnician] I'm fixing gold(25,23)
+[redTechnician] I saw server in: gold(5,28)
+[redTechnician] Leave desires and intentions to seek gold(5,28)
+[redTechnician] I'm going to gold(5,28)
+[redTechnician] I'm fixing gold(5,28)
+[greenTechnician] I reached (25x23)!
+[orangeTechnician] I am [26,3] that is near to [26,4]
+[redTechnician] I reached (5x28)!
+[orangeTechnician] I am near to [2,27]
+[pinkTechnician] I saw server in gold(16,1)
+[pinkTechnician] Leave desires and intentions to seek gold(16,1)
+[pinkTechnician] I'm going to gold(16,1)
+[pinkTechnician] I'm fixing gold(16,1)
+[pinkTechnician] I reached (16x1)!
+[orangeTechnician] I saw server in: gold(18,6)
+[orangeTechnician] Leave desires and intentions to seek gold(18,6)
+[orangeTechnician] I'm going to gold(18,6)
+[orangeTechnician] I'm fixing gold(18,6)
+[pinkTechnician] Failed to repair gold(16,1), it's not on BB.
+[orangeTechnician] I reached (18x6)!
+[greenTechnician] I reached (16x16)!
+[WorldModel] Agent 4 is carrying gold to the depot.
+[greenTechnician] Fix finished gold(25,23)
+[greenTechnician] Failed to repair gold(25,23), it's not on BB.
+[greenTechnician] Server distance: [d(5,gold(17,20))]1
+[greenTechnician] Next server is gold(17,20)
+[greenTechnician] I'm fixing gold(17,20)
+[greenTechnician] I reached (17x20)!
+[redTechnician] I reached (16x16)!
+[WorldModel] Agent 3 is carrying gold to the depot.
+[redTechnician] Fix finished gold(5,28)
+[redTechnician] Failed to repair gold(5,28), it's not on BB.
+[redTechnician] Server distance: [d(5,gold(17,20))]1
+[redTechnician] Next server is gold(17,20)
+[redTechnician] I'm fixing gold(17,20)
+[greenTechnician] I reached (16x16)!
+[WorldModel] Agent 4 is carrying gold to the depot.
+[greenTechnician] Fix finished gold(17,20)
+[greenTechnician] Failed to repair gold(17,20), it's not on BB.
+[greenTechnician] I am near to [19,10]
+[orangeTechnician] I reached (16x16)!
+[WorldModel] Agent 2 is carrying gold to the depot.
+[orangeTechnician] Fix finished gold(18,6)
+[orangeTechnician] Failed to repair gold(18,6), it's not on BB.
+[orangeTechnician] Server distance: [d(2,gold(16,14))]1
+[orangeTechnician] Next server is gold(16,14)
+[orangeTechnician] I'm fixing gold(16,14)
+[greenTechnician] I saw server in: gold(20,13)
+[greenTechnician] Leave desires and intentions to seek gold(20,13)
+[greenTechnician] I'm going to gold(20,13)
+[greenTechnician] I'm fixing gold(20,13)
+[orangeTechnician] I reached (16x14)!
+[greenTechnician] I reached (20x13)!
+[orangeTechnician] I reached (16x16)!
+[WorldModel] Agent 2 is carrying gold to the depot.
+[orangeTechnician] Fix finished gold(16,14)
+[orangeTechnician] Failed to repair gold(16,14), it's not on BB.
+[orangeTechnician] I am near to [25,33]
+[greenTechnician] I reached (16x16)!
+[WorldModel] Agent 4 is carrying gold to the depot.
+[greenTechnician] Fix finished gold(20,13)
+[greenTechnician] Failed to repair gold(20,13), it's not on BB.
+[greenTechnician] I am near to [31,32]
+[GroupBoard] manager has quit, role manager removed by the platform!

@@ -24,7 +24,7 @@ import javax.swing.event.ChangeListener;
 @SuppressWarnings("serial")
 public class WorldView extends GridWorldView {
 
-    MiningPlanet env = null;
+    DataCenterPlanet env = null;
 
     public WorldView(WorldModel model) {
         super(model, "Data Center", 600);
@@ -32,7 +32,7 @@ public class WorldView extends GridWorldView {
         repaint();
     }
 
-    public void setEnv(MiningPlanet env) {
+    public void setEnv(DataCenterPlanet env) {
         this.env = env;
     }
 

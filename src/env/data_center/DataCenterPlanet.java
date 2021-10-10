@@ -10,9 +10,9 @@ import cartago.Artifact;
 import cartago.OPERATION;
 import cartago.ObsProperty;
 
-public class MiningPlanet extends Artifact {
+public class DataCenterPlanet extends Artifact {
 
-    private static Logger logger = Logger.getLogger(MiningPlanet.class.getName());
+    private static Logger logger = Logger.getLogger(DataCenterPlanet.class.getName());
 
     static WorldModel  model = null;
     static WorldView   view;
@@ -34,10 +34,6 @@ public class MiningPlanet extends Artifact {
     public void init(int scenario, int agId) {
         this.agId = agId;
         initWorld(scenario);
-        
-        //goldGenerator = new Thread(new GoldGenerator(model, view));
-        //goldGenerator.start();
-        
     }
 
     public int getSimId() {
@@ -47,7 +43,6 @@ public class MiningPlanet extends Artifact {
     public void setSleep(int s) {
         sleep = s;
     }
-    
 
     @OPERATION void up() throws Exception {     move(Move.UP);    }
     @OPERATION void down() throws Exception {   move(Move.DOWN);  }
@@ -82,11 +77,6 @@ public class MiningPlanet extends Artifact {
             if (model == null) {
                 switch (w) {
                 case 1: model = WorldModel.world1(); break;
-                case 2: model = WorldModel.world2(); break;
-                case 3: model = WorldModel.world3(); break;
-                case 4: model = WorldModel.world4(); break;
-                case 5: model = WorldModel.world5(); break;
-                case 6: model = WorldModel.world6(); break;
                 default:
                     logger.info("Invalid index!");
                     return;
@@ -101,7 +91,6 @@ public class MiningPlanet extends Artifact {
             defineObsProperty("depot", simId, model.getDepot().x, model.getDepot().y);
             defineObsProperty("pos", -1, -1);
             updateAgPercept();
-            //informAgsEnvironmentChanged();
         } catch (Exception e) {
             logger.warning("Error creating world "+e);
             e.printStackTrace();
@@ -110,7 +99,6 @@ public class MiningPlanet extends Artifact {
 
     public void endSimulation() {
         defineObsProperty("end_of_simulation", simId, 0);
-        //informAgsEnvironmentChanged();
         if (view != null) view.setVisible(false);
         WorldModel.destroy();
     }
@@ -139,8 +127,6 @@ public class MiningPlanet extends Artifact {
         updateAgPercept(l.x + 1, l.y - 1);
         updateAgPercept(l.x + 1, l.y);
         updateAgPercept(l.x + 1, l.y + 1);
-
-        //view.update();
     }
 
     private static Term gold     = new Atom("gold");
@@ -159,11 +145,5 @@ public class MiningPlanet extends Artifact {
         } else if (model.hasObject(WorldModel.OBSTACLE, x, y)) {
             defineObsProperty("cell", x, y, obstacle);
         }
-
-        //if (model.hasObject(WorldModel.ENEMY, x, y))
-        //    defineObsProperty("cell", x, y, "enemy");
-        //if (model.hasObject(WorldModel.AGENT, x, y))
-        //    defineObsProperty("cell", x, y, "ally");
     }
-
 }

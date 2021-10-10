@@ -1,11 +1,8 @@
-
-// miner agent
-
+// Pink Technician
 { include("$jacamoJar/templates/common-cartago.asl") }
 
-
 /* beliefs */
-last_dir(null). // the last movement I did
+last_dir(null). // the last technician movement
 free.
 score(0).
 count(0).
@@ -25,10 +22,10 @@ team("pink").
 
 +free
    <-   askUnknownCell(RX, RY) [artifact_id(MapId)];
-        if(RX == 100){
+        if (RX == 100) {
          .print("There's a free cell.");
          -free;
-        } else{
+        } else {
          !go_near(RX,RY);
         }
    .
@@ -93,8 +90,7 @@ team("pink").
    <- !next_step(X,Y);
       !pos(X,Y).
 
-/* Planos de busca de ouro */
-
+/* Plans to fix servers */
 +cell(X,Y,gold) :  not carrying_gold
     <- setGoldCell(X, Y) [artifact_id(MapId)];
        +gold(X,Y);
@@ -121,8 +117,9 @@ team("pink").
       .drop_desire(handle(gold(X,Y)));
       !ask_gold_cell;
    .
+
 // atomic: so as not to handle another event until handle 
-//gold is initialized
+// Repair is initialized
 @pgold[atomic] 
 +gold(X,Y)
   :  not carrying_gold & free
@@ -133,11 +130,11 @@ team("pink").
 @pgold2[atomic]
 +gold(X,Y)
   :  not carrying_gold & not free &
-     .desire(handle(gold(OldX,OldY))) &   // I desire to handle another gold which
+     .desire(handle(gold(OldX,OldY))) & // I desire to handle another gold which
      pos(AgX,AgY) &
      jia.dist(X,   Y,   AgX,AgY,DNewG) &
      jia.dist(OldX,OldY,AgX,AgY,DOldG) &
-     DNewG < DOldG                        // is farther than the one just perceived
+     DNewG < DOldG // is farther than the one just perceived
   <- .drop_desire(handle(gold(OldX,OldY)));
      .print("Giving up the current server ",gold(OldX,OldY)," to go server in ",gold(X,Y));
      !init_handle(gold(X,Y)).
@@ -171,7 +168,7 @@ team("pink").
      ?depot(_,DX,DY);
      !pos(DX,DY);
      !ensure(drop, 0);
-     .print("Fix finished ",gold(X,Y));
+     .print("Repair finished ",gold(X,Y));
      ?score(S);
      -+score(S+1);
      .send(leader,tell,dropped(T));
@@ -179,17 +176,18 @@ team("pink").
 
 // if ensure(pick/drop) failed, pursue another gold
 -!handle(G) : G
-  <- .print("Failed in the server repair ",G);
+  <- .print("Server repair failed ", G);
      .abolish(G); // ignore source
      !!ask_gold_cell.
 -!handle(G) : true
-  <- .print("Failed to repair ",G,", it's not on BB.");
+  <- .print("Failed to repair ", G, ", it's not on BB.");
      !!ask_gold_cell.
 
 +!ensure(pick,_) : pos(X,Y) & gold(X,Y)
   <- pick;
      ?carrying_gold;
      -gold(X,Y).
+
 // fail if no gold there or not carrying_gold after pick!
 // handle(G) will "catch" this failure.
 
@@ -219,4 +217,4 @@ team("pink").
      .abolish(gold(_,_));
      .abolish(picked(_));
      -+free;
-     .print("------ END ",S," ------").
+     .print("- END ", S, " -").

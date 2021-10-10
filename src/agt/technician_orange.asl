@@ -1,5 +1,4 @@
-// miner agent
-
+// Orange Technician
 team("orange").
 
 !start.
@@ -10,6 +9,4 @@ team("orange").
         .print("MapName: ", MapName);
         .
 
-{ include("miner.asl") }
-
-
+{ include("technician.asl") }

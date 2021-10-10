@@ -1,40 +1,40 @@
 /*
     JaCaMo Project File
-
     This file defines the initial state of the MAS (initial agents, environment, organisation, ....)
 */
 
 mas mas_data_center {
 	
-    agent leader
+    agent manager
     
-    agent pinkMiner : miner_pink.asl  {
+    agent pinkTechnician : technician_pink.asl  {
         focus: data_center.m1view
         focus: data_center.pinkTeamMap
     }
     
-    agent orangeMiner : miner_orange.asl  {
+    agent orangeTechnician : technician_orange.asl  {
         focus: data_center.m2view
         focus: data_center.orangeTeamMap
     }
    
-    agent redMiner : miner_red.asl  {
+    agent redTechnician : technician_red.asl  {
         focus: data_center.m3view
         focus: data_center.redTeamMap
     }
     
-    agent greenMiner : miner_green.asl  {
+    agent greenTechnician : technician_green.asl  {
         focus: data_center.m4view
         focus: data_center.greenTeamMap
     }
 
     workspace data_center {
-       // cada agente tem seu proprio artefato para interagir com o cenario Mining Planet
-        // o primeiro parametro � o id do cenario o segundo � o id do agente no cenario
-        artifact m1view: data_center.MiningPlanet(6,0)
-        artifact m2view: data_center.MiningPlanet(6,1)
-        artifact m3view: data_center.MiningPlanet(6,2)
-        artifact m4view: data_center.MiningPlanet(6,3)
+        // Each agent contains his own artifact to interact with the MAS
+        // 1st parameter: Scenario ID
+        // 2nd parameter: Technician ID
+        artifact m1view: data_center.DataCenterPlanet(1,0)
+        artifact m2view: data_center.DataCenterPlanet(1,1)
+        artifact m3view: data_center.DataCenterPlanet(1,2)
+        artifact m4view: data_center.DataCenterPlanet(1,3)
 
         artifact pinkTeamMap	: data_center.WorldMap("TeamPink")
         artifact orangeTeamMap	: data_center.WorldMap("TeamOrange")
@@ -42,13 +42,13 @@ mas mas_data_center {
         artifact greenTeamMap	: data_center.WorldMap("TeamGreen")
     }
     
-    organisation miningOrg : data_center.xml {
-        group techGrp :  miningGroup {
-             players: leader       leader
-                      pinkMiner    miner
-                      orangeMiner  miner
-                      redMiner     miner
-                      greenMiner   miner
+    organisation dcOrg : data_center.xml {
+        group techGrp :  dcGroup {
+             players: manager           manager
+                      pinkTechnician    technician
+                      orangeTechnician  technician
+                      redTechnician     technician
+                      greenTechnician   technician
             debug
         } 
         scheme data_center_schema: data_center_sch
@@ -58,5 +58,3 @@ mas mas_data_center {
     			src/agt/jia                 
     asl-path: src/agt
 }
-
-   

@@ -1,14 +1,5 @@
-// miner agent
-
+// Technician
 { include("$jacamoJar/templates/common-cartago.asl") }
-
-/*
- * By Joao Leite
- * Based on implementation developed by Rafael Bordini, Jomi Hubner and Maicon Zatelli
- * 
- * Atualizado em Maio de 2021
- * por Lara Popov Zambiasi Bazzi Oberderfer
- */
 
 /* beliefs */
 last_dir(null). // the last movement I did
@@ -18,7 +9,6 @@ count(0).
 
 /* rules */
 /* this agent program doesn't have any rules */
-
 
 /* Quando estão livres, os agentes ficam vagando. 
  * Isso é codificado com um plano que é executado quando os agentes se tornam livres 

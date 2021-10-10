@@ -1,5 +1,4 @@
-// miner agent
-
+// Green Technician
 team("green").
 
 !start.
@@ -11,6 +10,4 @@ team("green").
         focus(MapId);
         .
 
-{ include("miner.asl") }
-
-
+{ include("technician.asl") }

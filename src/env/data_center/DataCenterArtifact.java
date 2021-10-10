@@ -1,10 +1,10 @@
 package data_center;
-// CArtAgO artifact code for project envCoordinationMAS
 
+// CArtAgO artifact code for project envCoordinationMAS
 import jason.asSyntax.Atom;
 import cartago.*;
 
-public class MiningArtifact extends Artifact {
+public class DataCenterArtifact extends Artifact {
 
     String currentWinner = "no_winner";
 
