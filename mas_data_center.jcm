@@ -1,0 +1,62 @@
+/*
+    JaCaMo Project File
+
+    This file defines the initial state of the MAS (initial agents, environment, organisation, ....)
+*/
+
+mas mas_data_center {
+	
+    agent leader
+    
+    agent pinkMiner : miner_pink.asl  {
+        focus: data_center.m1view
+        focus: data_center.pinkTeamMap
+    }
+    
+    agent orangeMiner : miner_orange.asl  {
+        focus: data_center.m2view
+        focus: data_center.orangeTeamMap
+    }
+   
+    agent redMiner : miner_red.asl  {
+        focus: data_center.m3view
+        focus: data_center.redTeamMap
+    }
+    
+    agent greenMiner : miner_green.asl  {
+        focus: data_center.m4view
+        focus: data_center.greenTeamMap
+    }
+
+    workspace data_center {
+       // cada agente tem seu proprio artefato para interagir com o cenario Mining Planet
+        // o primeiro parametro � o id do cenario o segundo � o id do agente no cenario
+        artifact m1view: data_center.MiningPlanet(6,0)
+        artifact m2view: data_center.MiningPlanet(6,1)
+        artifact m3view: data_center.MiningPlanet(6,2)
+        artifact m4view: data_center.MiningPlanet(6,3)
+
+        artifact pinkTeamMap	: data_center.WorldMap("TeamPink")
+        artifact orangeTeamMap	: data_center.WorldMap("TeamOrange")
+        artifact redTeamMap		: data_center.WorldMap("TeamRed")        
+        artifact greenTeamMap	: data_center.WorldMap("TeamGreen")
+    }
+    
+    organisation miningOrg : data_center.xml {
+        group techGrp :  miningGroup {
+             players: leader       leader
+                      pinkMiner    miner
+                      orangeMiner  miner
+                      redMiner     miner
+                      greenMiner   miner
+            debug
+        } 
+        scheme data_center_schema: data_center_sch
+    } 
+
+    class-path: lib  
+    			src/agt/jia                 
+    asl-path: src/agt
+}
+
+   
