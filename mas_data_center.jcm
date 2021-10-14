@@ -1,0 +1,58 @@
+// JaCaMo Project File
+// This file defines the initial state of the MAS (initial agents, environment, organisation, ....)
+
+mas mas_data_center {
+	
+    agent manager
+    
+    agent hardwareEngineer : hardware_engineer.asl  {
+        focus: data_center.m1view
+        focus: data_center.hardwareTeamMap
+    }
+    
+    agent networkEngineer : network_engineer.asl  {
+        focus: data_center.m2view
+        focus: data_center.networkTeamMap
+    }
+   
+    agent systemAdmin : system_admin.asl  {
+        focus: data_center.m3view
+        focus: data_center.systemTeamMap
+    }
+    
+    agent facilitiesTechnician : facilities_technician.asl  {
+        focus: data_center.m4view
+        focus: data_center.facilitiesTeamMap
+    }
+
+    workspace data_center {
+        // Each agent contains his own artifact to interact with the MAS
+        // 1st parameter: Scenario ID
+        // 2nd parameter: Technician ID
+        artifact m1view: data_center.DataCenterPlanet(1,0)
+        artifact m2view: data_center.DataCenterPlanet(1,1)
+        artifact m3view: data_center.DataCenterPlanet(1,2)
+        artifact m4view: data_center.DataCenterPlanet(1,3)
+
+        artifact hardwareTeamMap	: data_center.WorldMap("TeamHardware")
+        artifact networkTeamMap	    : data_center.WorldMap("TeamNetwork")
+        artifact systemTeamMap		: data_center.WorldMap("TeamSystem")        
+        artifact facilitiesTeamMap	: data_center.WorldMap("TeamFacilities")
+    }
+    
+    organisation dcOrg : data_center.xml {
+        group techGrp :  dcGroup {
+             players: manager               manager
+                      hardwareEngineer      technician
+                      networkEngineer       technician
+                      systemAdmin           technician
+                      facilitiesTechnician  technician
+            debug
+        } 
+        scheme data_center_schema: data_center_sch
+    } 
+
+    class-path: lib  
+    			src/agt/jia                 
+    asl-path: src/agt
+}

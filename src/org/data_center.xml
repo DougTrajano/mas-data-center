@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="http://moise.sourceforge.net/xml/os.xsl" type="text/xsl" ?>
+<organisational-specification
+    id="data_center"
+    os-version="0.1"
+
+    xmlns='http://moise.sourceforge.net/os'
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation='http://moise.sourceforge.net/os http://moise.sourceforge.net/xml/os.xsd' >
+
+    <structural-specification>
+ 
+        <role-definitions>
+			 <role id="technician" />
+			 <role id="manager" />
+		</role-definitions>
+
+        <group-specification id="dcGroup">
+            <roles>
+                <role id="technician"/>
+                <role id="manager"/>
+            </roles>
+        </group-specification>
+
+    </structural-specification>
+
+    <functional-specification>
+
+        <scheme id="data_center_sch" >
+            <goal id="winning">
+		     <plan operator="parallel">
+		       <goal id="technician" />
+		       <goal id="dropped" />
+		     </plan>
+		   </goal>
+
+            <mission id="mTechnician" min="1" max="1">
+                <goal id="winning"/>
+            </mission>
+
+            <mission id="mManager" min="1" max="1">
+                <goal id="dropped"/>
+            </mission>
+        </scheme>
+
+    </functional-specification>
+
+    <normative-specification>
+	  <norm id="n1"  type="permission"   role="technician"   mission="mTechnician" />
+	  <norm id="n2"  type="obligation"   role="manager"  mission="mManager" />
+	</normative-specification>
+
+</organisational-specification>
