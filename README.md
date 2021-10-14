@@ -18,7 +18,7 @@ If you are using Eclipse (with JaCaMo plugin), you can run the project double-cl
 
 ## Changelog
 
-See the [changelog](CHANGELOG.md) for a history of notable changes to this project.
+See the [GitHub Tags](https://github.com/DougTrajano/pucrs-mas-data-center/tags) for a history of notable changes to this project.
 
 ## License
 
