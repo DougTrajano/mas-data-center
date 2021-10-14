@@ -1,5 +1,5 @@
-// Orange Technician
-team("orange").
+// Network Engineer
+team("network").
 
 !start.
 +!start : true
@@ -9,4 +9,4 @@ team("orange").
         .print("MapName: ", MapName);
         .
 
-{ include("technician.asl") }
+{ include("base.asl") }

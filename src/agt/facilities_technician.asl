@@ -1,5 +1,5 @@
-// Green Technician
-team("green").
+// Facilities Technician
+team("facilities").
 
 !start.
 +!start : true
@@ -10,4 +10,4 @@ team("green").
         focus(MapId);
         .
 
-{ include("technician.asl") }
+{ include("base.asl") }

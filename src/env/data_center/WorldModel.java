@@ -11,14 +11,13 @@ import data_center.DataCenterPlanet.Move;
 
 public class WorldModel extends GridWorldModel {
 
-    public static final int   GOLD  = 16;
+    public static final int   ISSUE = 16;
     public static final int   DEPOT = 32;
-    public static final int   ENEMY = 64;
 
     Location                  depot;
-    Set<Integer>              agWithGold;  // which agent is carrying gold
-    int                       goldsInDepot   = 0;
-    int                       initialNbGolds = 0;
+    Set<Integer>              agWithPart; // which agent is carrying part
+    int                       issuesInDepot   = 0;
+    int                       initialNbIssues = 0;
 
     private Logger            logger   = Logger.getLogger("jasonTeamSimLocal.mas2j." + WorldModel.class.getName());
 
@@ -44,7 +43,7 @@ public class WorldModel extends GridWorldModel {
 
     private WorldModel(int w, int h, int nbAgs) {
         super(w, h, nbAgs);
-        agWithGold = new HashSet<Integer>();
+        agWithPart = new HashSet<Integer>();
     }
 
     public String getId() {
@@ -61,24 +60,24 @@ public class WorldModel extends GridWorldModel {
         return depot;
     }
 
-    public int getGoldsInDepot() {
-        return goldsInDepot;
+    public int getIssuesInDepot() {
+        return issuesInDepot;
     }
 
-    public boolean isAllGoldsCollected() {
-        return goldsInDepot == initialNbGolds;
+    public boolean isAllIssuesCollected() {
+        return issuesInDepot == initialNbIssues;
     }
 
-    public void setInitialNbGolds(int i) {
-        initialNbGolds = i;
+    public void setInitialNbIssues(int i) {
+        initialNbIssues = i;
     }
 
-    public int getInitialNbGolds() {
-        return initialNbGolds;
+    public int getInitialNbIssues() {
+        return initialNbIssues;
     }
 
-    public boolean isCarryingGold(int ag) {
-        return agWithGold.contains(ag);
+    public boolean isCarryingPart(int ag) {
+        return agWithPart.contains(ag);
     }
 
     public void setDepot(int x, int y) {
@@ -86,16 +85,14 @@ public class WorldModel extends GridWorldModel {
         data[x][y] = DEPOT;
     }
 
-    public void setAgCarryingGold(int ag) {
-        agWithGold.add(ag);
+    public void setAgCarryingPart(int ag) {
+        agWithPart.add(ag);
     }
-    public void setAgNotCarryingGold(int ag) {
-        agWithGold.remove(ag);
+    public void setAgNotCarryingPart(int ag) {
+        agWithPart.remove(ag);
     }
 
     /** Actions **/
-    
-    /* NOVA */
     public Location getFreePos() {
         for (int i=0; i<(getWidth() * getHeight() * 5); i++) {
           int x = random.nextInt(getWidth());
@@ -137,37 +134,37 @@ public class WorldModel extends GridWorldModel {
 
     boolean pick(int ag) {
         Location l = getAgPos(ag);
-        if (hasObject(WorldModel.GOLD, l.x, l.y)) {
-            if (!isCarryingGold(ag)) {
-                remove(WorldModel.GOLD, l.x, l.y);
+        if (hasObject(WorldModel.ISSUE, l.x, l.y)) {
+            if (!isCarryingPart(ag)) {
+                remove(WorldModel.ISSUE, l.x, l.y);
                 add(WorldModel.OBSTACLE, l.x, l.y);
-                setAgCarryingGold(ag);
+                setAgCarryingPart(ag);
                 return true;
             } else {
-                logger.warning("Agent " + (ag + 1) + " is trying pick up gold, but he already has gold.");
+                logger.warning("Agent " + (ag + 1) + " is trying to fix the server error, but he already has a part.");
             }
         } else {
-            logger.warning("Agent " + (ag + 1) + " is trying pick up gold, but there's no gold in " + l.x + "x" + l.y + ".");
+            logger.warning("Agent " + (ag + 1) + " is trying to fix the server error, but there's no issue in " + l.x + "x" + l.y + ".");
         }
         return false;
     }
 
     boolean drop(int ag) {
         Location l = getAgPos(ag);
-        if (isCarryingGold(ag)) {
+        if (isCarryingPart(ag)) {
             if (l.equals(getDepot())) {
-                goldsInDepot++;
-                logger.info("Agent " + (ag + 1) + " is carrying gold to the depot.");
+                issuesInDepot++;
+                logger.info("Agent " + (ag + 1) + " is carrying part to the depot.");
             } else {
-                add(WorldModel.GOLD, l.x, l.y);
+                add(WorldModel.ISSUE, l.x, l.y);
             }
-            setAgNotCarryingGold(ag);
+            setAgNotCarryingPart(ag);
             return true;
         }
         return false;
     }
 
-    /** Data Center (35x35) with 40 racks */
+    /* Data Center (35x35) with 40 racks */
     static WorldModel world1() throws Exception {
         WorldModel model = WorldModel.create(35, 35, 4);
         model.setId("Scenario 1");
@@ -179,13 +176,13 @@ public class WorldModel extends GridWorldModel {
 
         // rack 1
         model.add(WorldModel.OBSTACLE, 1, 1);
-        model.add(WorldModel.GOLD, 1, 2);
+        model.add(WorldModel.ISSUE, 1, 2);
         model.add(WorldModel.OBSTACLE, 1, 3);
         model.add(WorldModel.OBSTACLE, 1, 4);
         model.add(WorldModel.OBSTACLE, 1, 5);
         model.add(WorldModel.OBSTACLE, 1, 6);
         model.add(WorldModel.OBSTACLE, 2, 1);
-        model.add(WorldModel.GOLD, 2, 2);
+        model.add(WorldModel.ISSUE, 2, 2);
         model.add(WorldModel.OBSTACLE, 2, 3);
         model.add(WorldModel.OBSTACLE, 2, 4);
         model.add(WorldModel.OBSTACLE, 2, 5);
@@ -211,7 +208,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 9, 3);
         model.add(WorldModel.OBSTACLE, 9, 4);
         model.add(WorldModel.OBSTACLE, 9, 5);
-        model.add(WorldModel.GOLD, 9, 6);
+        model.add(WorldModel.ISSUE, 9, 6);
         model.add(WorldModel.OBSTACLE, 10, 1);
         model.add(WorldModel.OBSTACLE, 10, 2);
         model.add(WorldModel.OBSTACLE, 10, 3);
@@ -221,7 +218,7 @@ public class WorldModel extends GridWorldModel {
 
         // rack 4
         model.add(WorldModel.OBSTACLE, 13, 1);
-        model.add(WorldModel.GOLD, 13, 2);
+        model.add(WorldModel.ISSUE, 13, 2);
         model.add(WorldModel.OBSTACLE, 13, 3);
         model.add(WorldModel.OBSTACLE, 13, 4);
         model.add(WorldModel.OBSTACLE, 13, 5);
@@ -234,7 +231,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 14, 6);
 
         // rack 5
-        model.add(WorldModel.GOLD, 16, 1);
+        model.add(WorldModel.ISSUE, 16, 1);
         model.add(WorldModel.OBSTACLE, 16, 2);
         model.add(WorldModel.OBSTACLE, 17, 1);
         model.add(WorldModel.OBSTACLE, 17, 2);
@@ -247,7 +244,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 17, 5);
         model.add(WorldModel.OBSTACLE, 17, 6);
         model.add(WorldModel.OBSTACLE, 18, 5);
-        model.add(WorldModel.GOLD, 18, 6);
+        model.add(WorldModel.ISSUE, 18, 6);
 
         // rack 7
         model.add(WorldModel.OBSTACLE, 20, 1);
@@ -257,7 +254,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 20, 5);
         model.add(WorldModel.OBSTACLE, 20, 6);
         model.add(WorldModel.OBSTACLE, 21, 1);
-        model.add(WorldModel.GOLD, 21, 2);
+        model.add(WorldModel.ISSUE, 21, 2);
         model.add(WorldModel.OBSTACLE, 21, 3);
         model.add(WorldModel.OBSTACLE, 21, 4);
         model.add(WorldModel.OBSTACLE, 21, 5);
@@ -357,7 +354,7 @@ public class WorldModel extends GridWorldModel {
 
         // rack 15
         model.add(WorldModel.OBSTACLE, 16, 13);
-        model.add(WorldModel.GOLD, 16, 14);
+        model.add(WorldModel.ISSUE, 16, 14);
         model.add(WorldModel.OBSTACLE, 17, 13);
         model.add(WorldModel.OBSTACLE, 17, 14);
         model.add(WorldModel.OBSTACLE, 18, 13);
@@ -368,7 +365,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 20, 10);
         model.add(WorldModel.OBSTACLE, 20, 11);
         model.add(WorldModel.OBSTACLE, 20, 12);
-        model.add(WorldModel.GOLD, 20, 13);
+        model.add(WorldModel.ISSUE, 20, 13);
         model.add(WorldModel.OBSTACLE, 20, 14);
         model.add(WorldModel.OBSTACLE, 21, 9);
         model.add(WorldModel.OBSTACLE, 21, 10);
@@ -382,7 +379,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 24, 10);
         model.add(WorldModel.OBSTACLE, 24, 11);
         model.add(WorldModel.OBSTACLE, 24, 12);
-        model.add(WorldModel.GOLD, 24, 13);
+        model.add(WorldModel.ISSUE, 24, 13);
         model.add(WorldModel.OBSTACLE, 24, 14);
         model.add(WorldModel.OBSTACLE, 25, 9);
         model.add(WorldModel.OBSTACLE, 25, 10);
@@ -407,13 +404,13 @@ public class WorldModel extends GridWorldModel {
 
         // rack 19
         model.add(WorldModel.OBSTACLE, 32, 1);
-        model.add(WorldModel.GOLD, 32, 2);
+        model.add(WorldModel.ISSUE, 32, 2);
         model.add(WorldModel.OBSTACLE, 32, 3);
         model.add(WorldModel.OBSTACLE, 32, 4);
-        model.add(WorldModel.GOLD, 32, 5);
+        model.add(WorldModel.ISSUE, 32, 5);
         model.add(WorldModel.OBSTACLE, 32, 6);
         model.add(WorldModel.OBSTACLE, 33, 1);
-        model.add(WorldModel.GOLD, 33, 2);
+        model.add(WorldModel.ISSUE, 33, 2);
         model.add(WorldModel.OBSTACLE, 33, 3);
         model.add(WorldModel.OBSTACLE, 33, 4);
         model.add(WorldModel.OBSTACLE, 33, 5);
@@ -423,13 +420,13 @@ public class WorldModel extends GridWorldModel {
         // rack 20
         model.add(WorldModel.OBSTACLE, 32, 9);
         model.add(WorldModel.OBSTACLE, 32, 10);
-        model.add(WorldModel.GOLD, 32, 11);
+        model.add(WorldModel.ISSUE, 32, 11);
         model.add(WorldModel.OBSTACLE, 32, 12);
         model.add(WorldModel.OBSTACLE, 32, 13);
         model.add(WorldModel.OBSTACLE, 32, 14);
         model.add(WorldModel.OBSTACLE, 33, 9);
         model.add(WorldModel.OBSTACLE, 33, 10);
-        model.add(WorldModel.GOLD, 33, 11);
+        model.add(WorldModel.ISSUE, 33, 11);
         model.add(WorldModel.OBSTACLE, 33, 12);
         model.add(WorldModel.OBSTACLE, 33, 13);
         model.add(WorldModel.OBSTACLE, 33, 14);
@@ -440,7 +437,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 1, 22);
         model.add(WorldModel.OBSTACLE, 1, 23);
         model.add(WorldModel.OBSTACLE, 1, 24);
-        model.add(WorldModel.GOLD, 1, 25);
+        model.add(WorldModel.ISSUE, 1, 25);
         model.add(WorldModel.OBSTACLE, 2, 20);
         model.add(WorldModel.OBSTACLE, 2, 21);
         model.add(WorldModel.OBSTACLE, 2, 22);
@@ -493,7 +490,7 @@ public class WorldModel extends GridWorldModel {
         // rack 25
         model.add(WorldModel.OBSTACLE, 16, 20);
         model.add(WorldModel.OBSTACLE, 16, 21);
-        model.add(WorldModel.GOLD, 17, 20);
+        model.add(WorldModel.ISSUE, 17, 20);
         model.add(WorldModel.OBSTACLE, 17, 21);
         model.add(WorldModel.OBSTACLE, 18, 20);
         model.add(WorldModel.OBSTACLE, 18, 21);
@@ -530,7 +527,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 25, 20);
         model.add(WorldModel.OBSTACLE, 25, 21);
         model.add(WorldModel.OBSTACLE, 25, 22);
-        model.add(WorldModel.GOLD, 25, 23);
+        model.add(WorldModel.ISSUE, 25, 23);
         model.add(WorldModel.OBSTACLE, 25, 24);
         model.add(WorldModel.OBSTACLE, 25, 25);
 
@@ -577,7 +574,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 2, 33);
 
         // rack 32
-        model.add(WorldModel.GOLD, 5, 28);
+        model.add(WorldModel.ISSUE, 5, 28);
         model.add(WorldModel.OBSTACLE, 5, 29);
         model.add(WorldModel.OBSTACLE, 5, 30);
         model.add(WorldModel.OBSTACLE, 5, 31);
@@ -624,7 +621,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 17, 28);
         model.add(WorldModel.OBSTACLE, 17, 29);
         model.add(WorldModel.OBSTACLE, 18, 28);
-        model.add(WorldModel.GOLD, 18, 29);
+        model.add(WorldModel.ISSUE, 18, 29);
 
         // rack 36
         model.add(WorldModel.OBSTACLE, 16, 32);
@@ -649,7 +646,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 21, 33);
 
         // rack 38
-        model.add(WorldModel.GOLD, 24, 28);
+        model.add(WorldModel.ISSUE, 24, 28);
         model.add(WorldModel.OBSTACLE, 24, 29);
         model.add(WorldModel.OBSTACLE, 24, 30);
         model.add(WorldModel.OBSTACLE, 24, 31);
@@ -678,7 +675,7 @@ public class WorldModel extends GridWorldModel {
 
         // rack 40
         model.add(WorldModel.OBSTACLE, 32, 28);
-        model.add(WorldModel.GOLD, 32, 29);
+        model.add(WorldModel.ISSUE, 32, 29);
         model.add(WorldModel.OBSTACLE, 32, 30);
         model.add(WorldModel.OBSTACLE, 32, 31);
         model.add(WorldModel.OBSTACLE, 32, 32);
@@ -690,7 +687,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 33, 32);
         model.add(WorldModel.OBSTACLE, 33, 33);
 
-        model.setInitialNbGolds(model.countObjects(WorldModel.GOLD));
+        model.setInitialNbIssues(model.countObjects(WorldModel.ISSUE));
         return model;
     }
 

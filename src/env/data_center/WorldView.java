@@ -38,7 +38,7 @@ public class WorldView extends GridWorldView {
 
     JLabel    jlMouseLoc;
     JSlider   jSpeed;
-    JLabel    jGoldsC;
+    JLabel    jIssuesC;
 
     @Override
     public void initComponents(int width) {
@@ -82,8 +82,8 @@ public class WorldView extends GridWorldView {
         msg.add(p);
         p = new JPanel(new FlowLayout(FlowLayout.CENTER));
         p.add(new JLabel("Fixed servers:"));
-        jGoldsC = new JLabel("0");
-        p.add(jGoldsC);
+        jIssuesC = new JLabel("0");
+        p.add(jIssuesC);
         msg.add(p);
 
         JPanel s = new JPanel(new BorderLayout());
@@ -106,10 +106,13 @@ public class WorldView extends GridWorldView {
                 int lin = e.getY() / cellSizeH;
                 if (col >= 0 && lin >= 0 && col < getModel().getWidth() && lin < getModel().getHeight()) {
                     WorldModel wm = (WorldModel)model;
-                    wm.add(WorldModel.GOLD, col, lin);
-                    wm.setInitialNbGolds(wm.getInitialNbGolds()+1);
-                    update(col, lin);
-                    udpateCollectedGolds();
+                    if (wm.hasObject(WorldModel.OBSTACLE, col, lin)) {
+                        wm.add(WorldModel.ISSUE, col, lin);
+                        wm.remove(WorldModel.OBSTACLE, col, lin);
+                        wm.setInitialNbIssues(wm.getInitialNbIssues()+1);
+                        update(col, lin);
+                        udpateCollectedIssues();
+                    }
                 }
             }
             public void mouseExited(MouseEvent e) {}
@@ -130,25 +133,24 @@ public class WorldView extends GridWorldView {
         });
     }
 
-    public void udpateCollectedGolds() {
+    public void udpateCollectedIssues() {
         WorldModel wm = (WorldModel)model;
-        jGoldsC.setText(wm.getGoldsInDepot() + "/" + wm.getInitialNbGolds());
+        jIssuesC.setText(wm.getIssuesInDepot() + "/" + wm.getInitialNbIssues());
     }
 
     @Override
     public void draw(Graphics g, int x, int y, int object) {
         switch (object) {
         case WorldModel.DEPOT:   drawDepot(g, x, y);  break;
-        case WorldModel.GOLD:    drawGold(g, x, y);  break;
-        case WorldModel.ENEMY:   drawEnemy(g, x, y);  break;
+        case WorldModel.ISSUE:    drawIssue(g, x, y);  break;
         }
     }
 
     @Override
     public void drawAgent(Graphics g, int x, int y, Color c, int id) {
         Color idColor = Color.black;
-        if (((WorldModel)model).isCarryingGold(id)) {
-            super.drawAgent(g, x, y, Color.yellow, -1);
+        if (((WorldModel)model).isCarryingPart(id)) {
+            super.drawAgent(g, x, y, Color.gray, -1);
         } else {
             super.drawAgent(g, x, y, c, -1);
             idColor = Color.white;
@@ -160,13 +162,13 @@ public class WorldView extends GridWorldView {
     public void drawDepot(Graphics g, int x, int y) {
         g.setColor(Color.gray);
         g.fillRect(x * cellSizeW, y * cellSizeH, cellSizeW, cellSizeH);
-        g.setColor(Color.pink);
+        g.setColor(Color.green);
         g.drawRect(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
         g.drawLine(x * cellSizeW + 2, y * cellSizeH + 2, (x + 1) * cellSizeW - 2, (y + 1) * cellSizeH - 2);
         g.drawLine(x * cellSizeW + 2, (y + 1) * cellSizeH - 2, (x + 1) * cellSizeW - 2, y * cellSizeH + 2);
     }
 
-    public void drawGold(Graphics g, int x, int y) {
+    public void drawIssue(Graphics g, int x, int y) {
         g.setColor(Color.red);
         g.drawRect(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
         int[] vx = new int[4];
@@ -181,10 +183,5 @@ public class WorldView extends GridWorldView {
         vy[3] = y * cellSizeH + (cellSizeH / 2);
         g.fillPolygon(vx, vy, 4);
     }
-
-    public void drawEnemy(Graphics g, int x, int y) {
-        g.setColor(Color.red);
-        g.fillOval(x * cellSizeW + 7, y * cellSizeH + 7, cellSizeW - 8, cellSizeH - 8);
-    }
-
+    
 }

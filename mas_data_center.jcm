@@ -1,30 +1,28 @@
-/*
-    JaCaMo Project File
-    This file defines the initial state of the MAS (initial agents, environment, organisation, ....)
-*/
+// JaCaMo Project File
+// This file defines the initial state of the MAS (initial agents, environment, organisation, ....)
 
 mas mas_data_center {
 	
     agent manager
     
-    agent pinkTechnician : technician_pink.asl  {
+    agent hardwareEngineer : hardware_engineer.asl  {
         focus: data_center.m1view
-        focus: data_center.pinkTeamMap
+        focus: data_center.hardwareTeamMap
     }
     
-    agent orangeTechnician : technician_orange.asl  {
+    agent networkEngineer : network_engineer.asl  {
         focus: data_center.m2view
-        focus: data_center.orangeTeamMap
+        focus: data_center.networkTeamMap
     }
    
-    agent redTechnician : technician_red.asl  {
+    agent systemAdmin : system_admin.asl  {
         focus: data_center.m3view
-        focus: data_center.redTeamMap
+        focus: data_center.systemTeamMap
     }
     
-    agent greenTechnician : technician_green.asl  {
+    agent facilitiesTechnician : facilities_technician.asl  {
         focus: data_center.m4view
-        focus: data_center.greenTeamMap
+        focus: data_center.facilitiesTeamMap
     }
 
     workspace data_center {
@@ -36,19 +34,19 @@ mas mas_data_center {
         artifact m3view: data_center.DataCenterPlanet(1,2)
         artifact m4view: data_center.DataCenterPlanet(1,3)
 
-        artifact pinkTeamMap	: data_center.WorldMap("TeamPink")
-        artifact orangeTeamMap	: data_center.WorldMap("TeamOrange")
-        artifact redTeamMap		: data_center.WorldMap("TeamRed")        
-        artifact greenTeamMap	: data_center.WorldMap("TeamGreen")
+        artifact hardwareTeamMap	: data_center.WorldMap("TeamHardware")
+        artifact networkTeamMap	    : data_center.WorldMap("TeamNetwork")
+        artifact systemTeamMap		: data_center.WorldMap("TeamSystem")        
+        artifact facilitiesTeamMap	: data_center.WorldMap("TeamFacilities")
     }
     
     organisation dcOrg : data_center.xml {
         group techGrp :  dcGroup {
-             players: manager           manager
-                      pinkTechnician    technician
-                      orangeTechnician  technician
-                      redTechnician     technician
-                      greenTechnician   technician
+             players: manager               manager
+                      hardwareEngineer      technician
+                      networkEngineer       technician
+                      systemAdmin           technician
+                      facilitiesTechnician  technician
             debug
         } 
         scheme data_center_schema: data_center_sch

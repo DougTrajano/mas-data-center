@@ -18,7 +18,7 @@ public class DataCenterPlanet extends Artifact {
     static WorldView   view;
     
     // Gerador de ouro
-    Thread goldGenerator;
+    Thread issueGenerator;
 
     static int     simId    = 5; // type of environment
     static int     sleep    = 200;
@@ -63,7 +63,7 @@ public class DataCenterPlanet extends Artifact {
     @OPERATION void drop() throws Exception {
         if (sleep > 0) await_time(sleep);
         model.drop(agId);
-        view.udpateCollectedGolds();
+        view.udpateCollectedIssues();
         updateAgPercept();
     }
     @OPERATION void skip() {
@@ -84,7 +84,7 @@ public class DataCenterPlanet extends Artifact {
                 if (hasGUI) {
                     view = new WorldView(model);
                     view.setEnv(this);
-                    view.udpateCollectedGolds();
+                    view.udpateCollectedIssues();
                 }
             }
             defineObsProperty("gsize", simId, model.getWidth(), model.getHeight());
@@ -110,11 +110,11 @@ public class DataCenterPlanet extends Artifact {
         p.updateValue(0, l.x);
         p.updateValue(1, l.y);
 
-        if (model.isCarryingGold(agId)) {
-            if (!hasObsProperty("carrying_gold"))
-                defineObsProperty("carrying_gold");
+        if (model.isCarryingPart(agId)) {
+            if (!hasObsProperty("carrying_part"))
+                defineObsProperty("carrying_part");
         } else try {
-            removeObsProperty("carrying_gold");
+            removeObsProperty("carrying_part");
         } catch (IllegalArgumentException e) {}
 
         // what's around
@@ -129,8 +129,8 @@ public class DataCenterPlanet extends Artifact {
         updateAgPercept(l.x + 1, l.y + 1);
     }
 
-    private static Term gold     = new Atom("gold");
-    private static Term obstacle = new Atom("obstacle");
+    private static Term issue     = new Atom("issue");
+    private static Term obstacle  = new Atom("obstacle");
 
     private void updateAgPercept(int x, int y) {
         if (model == null || !model.inGrid(x,y)) return;
@@ -140,8 +140,8 @@ public class DataCenterPlanet extends Artifact {
             removeObsPropertyByTemplate("cell", null, null, null);
         } catch (IllegalArgumentException e) {}
 
-        if (model.hasObject(WorldModel.GOLD, x, y)) {
-            defineObsProperty("cell", x, y, gold);
+        if (model.hasObject(WorldModel.ISSUE, x, y)) {
+            defineObsProperty("cell", x, y, issue);
         } else if (model.hasObject(WorldModel.OBSTACLE, x, y)) {
             defineObsProperty("cell", x, y, obstacle);
         }

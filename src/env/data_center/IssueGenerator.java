@@ -4,7 +4,7 @@ import jason.environment.grid.Location;
 import java.util.Random;
 import java.util.logging.Logger;
 
-public class GoldGenerator implements Runnable {
+public class IssueGenerator implements Runnable {
 
   WorldModel model;
   WorldView view;
@@ -12,10 +12,10 @@ public class GoldGenerator implements Runnable {
   private Logger logger   = Logger.getLogger("jasonTeamSimLocal.mas2j." + WorldModel.class.getName());
 
   protected Random random = new Random();
-  //tempo de geracao dos ouros
+  
   private static final int SLEEP_TIME = 10000; 
 
-  public GoldGenerator(WorldModel newModel, WorldView newView) {
+  public IssueGenerator(WorldModel newModel, WorldView newView) {
     model = newModel;
     view = newView;
   }
@@ -23,7 +23,7 @@ public class GoldGenerator implements Runnable {
   public void run() {
     while (!Thread.currentThread().isInterrupted()) {
       try {
-        generateRandomGold();
+        generateRandomIssue();
         Thread.sleep(SLEEP_TIME);
       } catch (InterruptedException ex) {
         Thread.currentThread().interrupt();
@@ -31,14 +31,14 @@ public class GoldGenerator implements Runnable {
     }
   }
 
-  public void generateRandomGold() {
+  public void generateRandomIssue() {
     Location l = model.getFreePos();
-    if( model.hasObject(WorldModel.OBSTACLE, l.y, l.x) ) {	    
-	    model.add(WorldModel.GOLD, l.y, l.x);
-	    model.setInitialNbGolds(model.getInitialNbGolds()+1);		    
+    if( model.hasObject(WorldModel.OBSTACLE, l.y, l.x) ) {	   
+      model.add(WorldModel.ISSUE, l.y, l.x);
+	    model.setInitialNbIssues(model.getInitialNbIssues()+1);		    
 	    view.update(l.y, l.x);
-	    view.udpateCollectedGolds();
-	    logger.warning("New gold in (" + l.x + "," + l.y + ")!");
+	    view.udpateCollectedIssues();
+	    logger.warning("New issue in (" + l.x + "," + l.y + ")!");
     }    
   }
 }

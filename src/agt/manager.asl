@@ -2,11 +2,11 @@
 
 winning(none,0).
 
-score("pink",0).
-score("orange",0).
-score("red",0).
-score("green",0).
- 
+score("hardware",0).
+score("network",0).
+score("system",0).
+score("facilities",0).
+
 +dropped(T)[source(A)] : score(T,S) & winning(L,SL) & S+1>SL
    <- -score(T,S);
       +score(T,S+1);
@@ -14,7 +14,7 @@ score("green",0).
       -+winning(T,S+1);
       .print(T," is winning with ",S+1," fixed servers.");
       .broadcast(tell,winning(T,S+1)).
-      
+
 +dropped(T)[source(A)] : score(T,S) & winning(L,SL) & S+1=SL
    <- -score(T,S);
       +score(T,S+1);
@@ -27,7 +27,7 @@ score("green",0).
    <- -score(T,S);
       +score(T,S+1);
       -dropped(T)[source(A)];
-      .print(A," delivered ",S+1," servers.").
+      .print(A," delivered ",S+1," hardware.").
       
 { include("$jacamoJar/templates/common-cartago.asl") }
 { include("$jacamoJar/templates/common-moise.asl") }

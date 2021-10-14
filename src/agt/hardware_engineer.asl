@@ -1,5 +1,5 @@
-// Red Technician
-team("red").
+// Hardware Engineer
+team("hardware").
 
 !start.
 +!start : true
@@ -10,4 +10,4 @@ team("red").
         .print("MapName: ", MapName);  
         .
 
-{ include("technician.asl") }
+{ include("base.asl") }

@@ -7,8 +7,8 @@ import java.util.*;
 
 public class WorldMap extends Artifact {
 
-	int map_rows = 35;
-	int map_cols = 35;
+	int rows = 35;
+	int cols = 35;
 
 	String team_color;
 
@@ -18,7 +18,7 @@ public class WorldMap extends Artifact {
 
 		this.team_color = team;
 
-		for (int i = 0; i < map_rows*map_cols; i++){
+		for (int i = 0; i < rows*cols; i++){
 			world_map.put(i, "?");
 		}
 		
@@ -41,7 +41,7 @@ public class WorldMap extends Artifact {
 
 	@OPERATION
 	void setFreeCell(int X, int Y) {
-		int my_key = map_cols*X+Y;
+		int my_key = cols*X+Y;
 		try{
 			world_map.replace(my_key, "F");
 		}
@@ -50,64 +50,64 @@ public class WorldMap extends Artifact {
 
 	@OPERATION
 	void setObstacleCell(int X, int Y) {
-		int my_key = map_cols*X+Y;
+		int my_key = cols*X+Y;
 		world_map.replace(my_key, "O");
 	}
 
 	@OPERATION
-	void setGoldCell(int X, int Y) {
-		int my_key = map_cols*X+Y;
+	void setIssueCell(int X, int Y) {
+		int my_key = cols*X+Y;
 		world_map.replace(my_key, "G");
 	}
 
 	@OPERATION
-	void setGoldFound(int X, int Y) {
-		signal("gold_found", X, Y);
+	void setIssueFound(int X, int Y) {
+		signal("issue_found", X, Y);
 	}
 
 	@OPERATION
-	void setGoldPicked(int X, int Y) {
-		signal("gold_picked", X, Y);
+	void setIssuePicked(int X, int Y) {
+		signal("issue_picked", X, Y);
 	}
 
 	@OPERATION
-	void setAgentGoldCell(int X, int Y) {
-		int my_key = map_cols*X+Y;
+	void setAgentIssueCell(int X, int Y) {
+		int my_key = cols*X+Y;
 		world_map.replace(my_key, "A");
 	}
 
 	@OPERATION
 	void askCellValue(int X, int Y, OpFeedbackParam<String> V) {
-		int my_key = map_cols*X+Y;
+		int my_key = cols*X+Y;
 		String my_value = world_map.get(my_key);
 		V.set(my_value);
 	}
 	
 
 	@OPERATION
-	void askCloserGoldCell(int X, int Y, OpFeedbackParam<Integer> XG, OpFeedbackParam<Integer> YG) {
+	void askCloserIssueCell(int X, int Y, OpFeedbackParam<Integer> XG, OpFeedbackParam<Integer> YG) {
 		int min_dist = 100;
-		int min_x_gold = 100;
-		int min_y_gold = 100;
-		int x_gold;
-		int y_gold;
+		int min_x_issue = 100;
+		int min_y_issue = 100;
+		int x_issue;
+		int y_issue;
 		for (Integer key : getKeys(world_map, "G")) {
 			if (key < 45){
-				x_gold = 0;
-				y_gold = key;
+				x_issue = 0;
+				y_issue = key;
 			} else {
-				y_gold = key % 45;
-				x_gold = (key - y_gold)/45;
+				y_issue = key % 45;
+				x_issue = (key - y_issue)/45;
 			}
-			int dist = (X - x_gold) + (Y - y_gold);
+			int dist = (X - x_issue) + (Y - y_issue);
 			if (dist < min_dist){
 				min_dist = dist;
-				min_x_gold = x_gold;
-				min_y_gold = y_gold;
+				min_x_issue = x_issue;
+				min_y_issue = y_issue;
 			}
 		}
-		XG.set(min_x_gold);
-		YG.set(min_y_gold);
+		XG.set(min_x_issue);
+		YG.set(min_y_issue);
 	}
 
 	@OPERATION
@@ -136,4 +136,3 @@ public class WorldMap extends Artifact {
 		}
 	}
 }
-
