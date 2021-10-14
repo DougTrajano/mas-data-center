@@ -2,7 +2,7 @@
 
 This projecta contains a Multi-Agent System (MAS) that simulates the data center environment.
 
-It's my term project for the course Multi-Agent Systems of the PUCRS.
+It's my term project for the Multi-Agent Systems course at [PUCRS](https://www.pucrs.br/).
 
 ## Prerequisites
 
