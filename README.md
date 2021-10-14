@@ -10,7 +10,7 @@ It's my term project for the course Multi-Agent Systems of the PUCRS.
 
 ## Demo
 
-Pending
+![](images/demo.gif)
 
 ## How to run
 
