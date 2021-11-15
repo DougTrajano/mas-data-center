@@ -11,6 +11,7 @@ import data_center.DataCenterPlanet.Move;
 
 public class WorldModel extends GridWorldModel {
 
+    public static final int   SWISSUE = 8;
     public static final int   ISSUE = 16;
     public static final int   DEPOT = 32;
 
@@ -134,17 +135,29 @@ public class WorldModel extends GridWorldModel {
 
     boolean pick(int ag) {
         Location l = getAgPos(ag);
-        if (hasObject(WorldModel.ISSUE, l.x, l.y)) {
+        if ( hasObject(WorldModel.ISSUE, l.x, l.y) ) {
             if (!isCarryingPart(ag)) {
                 remove(WorldModel.ISSUE, l.x, l.y);
                 add(WorldModel.OBSTACLE, l.x, l.y);
                 setAgCarryingPart(ag);
                 return true;
             } else {
-                logger.warning("Agent " + (ag + 1) + " is trying to fix the server error, but he already has a part.");
+                logger.warning("Agent " + (ag + 1) + " is trying to fix the hardware issue, but he already has a part.");
             }
         } else {
-            logger.warning("Agent " + (ag + 1) + " is trying to fix the server error, but there's no issue in " + l.x + "x" + l.y + ".");
+            logger.warning("Agent " + (ag + 1) + " is trying to fix the hardware issue, but there's no issue in " + l.x + "x" + l.y + ".");
+        }
+        if ( hasObject(WorldModel.SWISSUE, l.x, l.y) ) {
+            if (!isCarryingPart(ag)) {
+                remove(WorldModel.SWISSUE, l.x, l.y);
+                add(WorldModel.OBSTACLE, l.x, l.y);
+                setAgCarryingPart(ag);
+                return true;
+            } else {
+                logger.warning("Agent " + (ag + 1) + " is trying to fix the software issue, but he already has a part.");
+            }
+        } else {
+            logger.warning("Agent " + (ag + 1) + " is trying to fix the software issue, but there's no issue in " + l.x + "x" + l.y + ".");
         }
         return false;
     }
@@ -175,8 +188,8 @@ public class WorldModel extends GridWorldModel {
         model.setAgPos(3, 27, 26);
 
         // rack 1
-        model.add(WorldModel.OBSTACLE, 1, 1);
-        model.add(WorldModel.ISSUE, 1, 2);
+        model.add(WorldModel.SWISSUE, 1, 1);
+        model.add(WorldModel.OBSTACLE, 1, 2);
         model.add(WorldModel.OBSTACLE, 1, 3);
         model.add(WorldModel.OBSTACLE, 1, 4);
         model.add(WorldModel.OBSTACLE, 1, 5);
@@ -208,7 +221,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 9, 3);
         model.add(WorldModel.OBSTACLE, 9, 4);
         model.add(WorldModel.OBSTACLE, 9, 5);
-        model.add(WorldModel.ISSUE, 9, 6);
+        model.add(WorldModel.SWISSUE, 9, 6);
         model.add(WorldModel.OBSTACLE, 10, 1);
         model.add(WorldModel.OBSTACLE, 10, 2);
         model.add(WorldModel.OBSTACLE, 10, 3);
@@ -404,7 +417,7 @@ public class WorldModel extends GridWorldModel {
 
         // rack 19
         model.add(WorldModel.OBSTACLE, 32, 1);
-        model.add(WorldModel.ISSUE, 32, 2);
+        model.add(WorldModel.SWISSUE, 32, 2);
         model.add(WorldModel.OBSTACLE, 32, 3);
         model.add(WorldModel.OBSTACLE, 32, 4);
         model.add(WorldModel.ISSUE, 32, 5);
@@ -558,7 +571,7 @@ public class WorldModel extends GridWorldModel {
         model.add(WorldModel.OBSTACLE, 33, 23);
         model.add(WorldModel.OBSTACLE, 33, 24);
         model.add(WorldModel.OBSTACLE, 33, 25);
-
+        
         // rack 31
         model.add(WorldModel.OBSTACLE, 1, 28);
         model.add(WorldModel.OBSTACLE, 1, 29);

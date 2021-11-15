@@ -1,210 +1,224 @@
-// System Admin
+// Technician
 { include("$jacamoJar/templates/common-cartago.asl") }
 
-/* beliefs */
+/* Beliefs */
 last_dir(null). // the last agent movement
 free.
 score(0).
 count(0).
-team("system").
 
-!start.
-+!start 
-   : true
-    <-  ?team(T);
-        ?pos(AgX, AgY);
-        !setFreeCellsAround(AgX, AgY);
-        
-        .concat(T, "TeamMap", MapName);
-        lookupArtifact(MapName, MapId);
-        .print("MapName: ", MapName);        
-        .
+// Rules
+// this agent program doesn't have any rules */
 
-+free
-   <-   askUnknownCell(RX, RY) [artifact_id(MapId)];
-        if (RX == 100) {
-         .print("There's a free cell.");
-         -free;
-        } else {
-         !go_near(RX,RY);
-        }
-   .
+// When the agents are free, they are wandering around
+// This is applied with a plan that is actioned when the agents become free
+// (which happens initially because of the "free" belief above,
+// but it can also happen during the agent's execution).
 
-+free <- .wait(100); -+free.
+// The plan takes two random numbers within the scope of the grid
+// (using jia.random function) and then calls the go_near subgoal.
 
-+near(X,Y) : free <- !ask_gold_cell.
+// Once the agent is close to the desired position, be free,
+// he deletes and adds the free atom to its belief base, which will trigger the plan to go to a random location again.
 
-+!setFreeCellsAround(X, Y)
-    <- !setFreeCells(X, Y);
-       !setFreeCells(X, Y+1);
-       !setFreeCells(X, Y-1);
-       !setFreeCells(X+1, Y);
-       !setFreeCells(X+1, Y+1);
-       !setFreeCells(X+1, Y-1);
-       !setFreeCells(X-1, Y);
-       !setFreeCells(X-1, Y+1);
-       !setFreeCells(X-1, Y-1);
-       .
++free : gsize(_,W,H) & jia.random(RX,W-1) & jia.random(RY,H-1)
+   <- .print("I am near to [",RX,",",RY,"]");  
+   !go_near(RX,RY).
++free  // gsize is unknown yet
+   <- .wait(100); -+free.
 
-+!setFreeCells(X, Y)
-    <-  askCellValue(X, Y, V);
-        if(V == "?") {
-            setFreeCell(X, Y) [artifact_id(MapId)];
-        }
-        .
+// When the agent comes to believe it's near to a position,
+// and it's still free, it updates the "free" atom so it can be trigger the plan to go to a random location again.
++near(X,Y) : free 
+	<- .wait(100);
+	-+free.
 
+// I'm near some place if I'm near it.
++!near(X,Y) 
+	: (pos(AgX,AgY) 
+	& jia.neighbour(AgX,AgY,X,Y))
+   <- .print ("I am ", "[", AgX, ",", AgY, "]", " that is near to [", X, ",", Y , "]"); 
+      +near(X,Y).
+
+// I'm near somewhere if the last action was jumping to that place.
+// (significando que não há caminhos para lá)
++!near(X,Y) 
+	: pos(AgX,AgY) 
+	& last_dir(skip)
+   <- .print ("I am ", "[", AgX, ",", AgY, "]", " and I cannot go to '[", X, ",", Y, "]"); 
+      +near(X,Y).
+
++!near(X,Y) 
+	: not near(X,Y)
+   <- !next_step(X,Y);
+      !near(X,Y).
++!near(X,Y) 
+	: true
+   <- !near(X,Y).
+
+// The following plans encode how an agent should get close to a given location (X, Y).
+// As the location may not be reachable, the plans are successful
+// if the agent is close to the location, given by the action internal jia.neighbour,
+// or if the last action was to jump, which happens when the destination is not reachable,
+// provided by the plan next_step, which is called by the action internal jia.get_direction.
+// These plans are used only in the exploration of the network, since it is not very important
+// to reach the exact location.
 +!go_near(X,Y) : free
   <- -near(_,_);
      -last_dir(_);
      !near(X,Y).
 
-+!near(X,Y) : (pos(AgX,AgY) & jia.neighbour(AgX,AgY,X,Y))
-   <- .print("I am ", "(",AgX,",", AgY,")", " that is near to (",X,",", Y,")");
-      +near(X,Y).
-
-+!near(X,Y) : pos(AgX,AgY) & last_dir(skip)
-   <- .print("I am ", "(",AgX,",", AgY,")", " and I cannot go to ' (",X,",", Y,")");
-      +near(X,Y).
-
+// I am near to some location if I am near it or the last action was skip (meaning that there are no paths to there)
++!near(X,Y) : (pos(AgX,AgY) & jia.neighbour(AgX,AgY,X,Y)) | last_dir(skip)
+   <- +near(X,Y).
 +!near(X,Y) : not near(X,Y)
    <- !next_step(X,Y);
       !near(X,Y).
 +!near(X,Y) : true
    <- !near(X,Y).
 
-// I already know my position
-+!next_step(X,Y) : pos(AgX,AgY) 
-   <- !setFreeCellsAround(AgX, AgY);
-      jia.get_direction(AgX, AgY, X, Y, D);
+// The following plans executes a step towards X, Y.
+// They are used by the plans go_near up and near down.
+// It uses the internal action jia.get_direction that implement a search algorithm.
++!next_step(X,Y) : pos(AgX,AgY) // I already know my position
+   <- jia.get_direction(AgX, AgY, X, Y, D);
       -+last_dir(D);
       D.
 +!next_step(X,Y) : not pos(_,_) // I still do not know my position
    <- !next_step(X,Y).
--!next_step(X,Y) : true  // failure handling -> start again!
+-!next_step(X,Y) : true // failure handling -> start again!
    <- -+last_dir(null);
       !next_step(X,Y).
 
+// The following plans encode how an agent should get close to a specific location (X, Y).
+// Unlike the plans for getting close to a location, this one assumes that the location is reachable.
+// If the location is not reachable, it will loop forever.
 +!pos(X,Y) : pos(X,Y)
    <- .print("I reached (",X,"x",Y,")!").
 +!pos(X,Y) : not pos(X,Y)
    <- !next_step(X,Y);
-      !pos(X,Y).
+      !pos(X,Y). 
 
-/* Plans to fix servers */
-+cell(X,Y,issue) :  not carrying_part
-    <- setIssueCell(X, Y) [artifact_id(MapId)];
-       +issue(X,Y);
-    .
+// Plans to find software issues
 
-+cell(X,Y,issue) 
-    <- setIssueCell(X, Y) [artifact_id(MapId)];
-       setIssueFound(X, Y) [artifact_id(MapId)];
-    .
+// The following plan encodes how an agent should handle a newly found software issue
+// when it is not carrying part and is free.
+// The first step changes the belief so that the agent no longer believes he is free.
+// Then, it adds the belief that there is gold in the position X, Y and
+// prints a message. Finally, it calls a plan to handle that software issue.
 
-+cell(X,Y,obstacle) 
-    <- setObstacleCell(X, Y) [artifact_id(MapId)];
-.
+// The perceived software issue is included as self-belief
+// (to not be removed once it is no longer seen)
++cell(X,Y,swissue) <- +swissue(X,Y).
 
-+issue_found(X, Y) 
-   : not issue(X,Y)
-   <- +issue(X, Y);
-   .
-
-+part_picked(X, Y)
-   : .desire(handle(issue(X,Y))) &
-     not picked(issue(X,Y))
-   <- -issue(X, Y);
-      .drop_desire(handle(issue(X,Y)));
-      !ask_issue_cell;
-   .
-
-// atomic: so as not to handle another event until handle 
-// Repair is initialized
-@pgold[atomic] 
-+issue(X,Y)
+// atomic: to avoid handle other event until the issue is handled
+@pswissue[atomic] 
++swissue(X,Y)
   :  not carrying_part & free
   <- -free;
-     .print("I saw a server error in ",issue(X,Y));
-     !init_handle(issue(X,Y)).
+     .print("I saw a software issue in: ",swissue(X,Y));
+     !init_handle(swissue(X,Y)).
 
-@pissue2[atomic]
-+issue(X,Y)
+// new plans for event +swissue(_,_) */
+@pcell[atomic] // atomic: to avoid handle other event until the software issue is handled
++swissue(X,Y)
+   :  not carrying_part & free
+   <- -free;
+      .print("I saw a software issue in: ",swissue(X,Y));
+      !init_handle(swissue(X,Y)).
+
+// If the agent see gold and isn't free, but he is not carrying gold yet,
+// abort the identifier (gold) and pick the one that is closer to him.
+@pcell2[atomic]
++swissue(X,Y)
   :  not carrying_part & not free &
-     .desire(handle(part(OldX,OldY))) & // I desire to handle another issue which
+     .desire(handle(swissue(OldX,OldY))) & // I desire to handle another software issue which
      pos(AgX,AgY) &
      jia.dist(X,   Y,   AgX,AgY,DNewG) &
      jia.dist(OldX,OldY,AgX,AgY,DOldG) &
      DNewG < DOldG // is farther than the one just perceived
-  <- .drop_desire(handle(issue(OldX,OldY)));
-     .print("Giving up the current server ",issue(OldX,OldY)," to go server in ",issue(X,Y));
-     !init_handle(issue(X,Y)).
+  <- .drop_desire(handle(swissue(OldX,OldY)));
+     .print("Giving up the current server ",swissue(OldX,OldY)," to go for ",swissue(X,Y)," that is close to me!");
+     !init_handle(swissue(X,Y)).
 
-+!ensure(pick,_) : pos(X,Y) & issue(X,Y)
-  <- pick;
-     +picked(issue(X,Y));
-     setFreeCell(X, Y) [artifact_id(MapId)];
-     setIssuePicked(X, Y) [artifact_id(MapId)];
-     ?carrying_issue;
-     -issue(X,Y).
+// The following plans encodes how an agent should handle a software issue.
 
+// Eliminate the desire to be near any location
 @pih1[atomic]
-+!init_handle(Issue)
++!init_handle(SWIssue)
   :  .desire(near(_,_))
-  <- .print("Leave desires and intentions to seek ",Issue);
+  <- .print("Leave desires and intentions to seek ",SWIssue);
      .drop_desire(near(_,_));
-     !init_handle(Issue).
-     
-@pih2[atomic]
-+!init_handle(Issue)
-  :  pos(X,Y)
-  <- .print("I'm going to ",Issue);
-     !!handle(Issue). // must use !! to perform "handle" as not atomic
+     !init_handle(SWIssue).
 
-+!handle(issue(X,Y))
-  :  not free & team(T)
-  <- .print("I'm fixing ",issue(X,Y));
+// Call the goal to handle the software issue
+@pih2[atomic]
++!init_handle(SWIssue)
+  :  pos(X,Y)
+  <- .print("I'm going to ",SWIssue);
+     !!handle(SWIssue).
+
+// Call the goal to handle the issue
++!handle(swissue(X,Y))
+  :  not free
+  <- .print("I'm fixing ",swissue(X,Y));
      !pos(X,Y);
-     !ensure(pick,issue(X,Y));
+     !ensure(pick,swissue(X,Y));
      ?depot(_,DX,DY);
-     !pos(DX,DY);
+     !pos(DX,DY); // !pos(0,0);
      !ensure(drop, 0);
-     .print("Repair finished ",issue(X,Y));
+     .print("Fix finished ",swissue(X,Y));
      ?score(S);
      -+score(S+1);
-     .send(leader,tell,dropped(T));
-     !!ask_issue_cell.
+     .send(leader,tell,dropped);
+     !!choose_swissue.
 
-// if ensure(pick/drop) failed, pursue another issue
+// If ensure(pick/drop) fails, search for another software issue
 -!handle(I) : I
-  <- .print("Server repair failed ", I);
+  <- .print("Failed in the server repair ",I);
      .abolish(I); // ignore source
-     !!ask_issue_cell.
+     !!choose_swissue.
 -!handle(I) : true
-  <- .print("Failed to repair ", I, ", it's not on BB.");
-     !!ask_issue_cell.
+  <- .print("Failed to repair ",I,", it's not on BB.");
+     !!choose_swissue.
 
-+!ensure(pick,_) : pos(X,Y) & issue(X,Y)
+/* The following plans encodes the actions of picking and dropping gold. */
++!ensure(pick,_) : pos(X,Y) & swissue(X,Y)
   <- pick;
      ?carrying_part;
-     -issue(X,Y).
+     -swissue(X,Y).
+// Fail if there's no gold there or don't carry part after picking
+// handle(G) will catch this failure
 
-// fail if no issue there or not carrying_part after repair!
-// handle(I) will "catch" this failure.
-
-+!ensure(drop, _) : carrying_part & pos(X,Y) & depot(_,DX,DY)
++!ensure(drop, _) : carrying_part & pos(X,Y) & depot(_,X,Y)
   <- drop.
 
-+!ask_issue_cell : pos(AgX, AgY)
-    <- askCloserIssueCell(AgX, AgY, XG, YG);
-       //.print("  [", XG, ", ", YG,"]");
-       if (XG \== 100){
-         setAgentIssueCell(XG, YG) [artifact_id(MapId)];
-         !!handle(issue(XG, YG));
-       } else {
-         -+free;
-       }
-       . 
+// The next plans encode how an agent should choose the next gold to follow (the closest one)
++!choose_swissue
+  :  not swissue(_,_)
+  <- -+free.
 
+// Issue finished, but there's other issues find the nearest one from the list of issues
++!choose_swissue
+  :  swissue(_,_)
+  <- .findall(swissue(X,Y),swissue(X,Y),LG);
+     !calc_swissue_distance(LG,LD);
+     .length(LD,LLD); LLD > 0;
+     .print("Server distance: ",LD,LLD);
+     .min(LD,d(_,NewG));
+     .print("Next server is ",NewG);
+     !!handle(NewG).
+-!choose_swissue <- -+free.
+
++!calc_swissue_distance([],[]).
++!calc_swissue_distance([swissue(GX,GY)|R],[d(D,swissue(GX,GY))|RD])
+  :  pos(IX,IY)
+  <- jia.dist(IX,IY,GX,GY,D);
+     !calc_swissue_distance(R,RD).
++!calc_swissue_distance([_|R],RD)
+  <- !calc_swissue_distance(R,RD).
+  
+// Winner
 +winning(A,S)[source(leader)] : .my_name(A)
    <-  -winning(A,S);
        .print("I'm the best!").
@@ -212,9 +226,10 @@ team("system").
 +winning(A,S)[source(leader)] : true
    <-  -winning(A,S).
 
+// End simulation
 +end_of_simulation(S,_) : true
   <- .drop_all_desires;
-     .abolish(issue(_,_));
+     .abolish(swissue(_,_));
      .abolish(picked(_));
      -+free;
-     .print("- END ", S, " -").
+     .print("- END ",S," -").

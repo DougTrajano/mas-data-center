@@ -57,7 +57,13 @@ public class WorldMap extends Artifact {
 	@OPERATION
 	void setIssueCell(int X, int Y) {
 		int my_key = cols*X+Y;
-		world_map.replace(my_key, "G");
+		world_map.replace(my_key, "I");
+	}
+
+	@OPERATION
+	void setSWIssueCell(int X, int Y) {
+		int my_key = cols*X+Y;
+		world_map.replace(my_key, "S");
 	}
 
 	@OPERATION
@@ -91,7 +97,7 @@ public class WorldMap extends Artifact {
 		int min_y_issue = 100;
 		int x_issue;
 		int y_issue;
-		for (Integer key : getKeys(world_map, "G")) {
+		for (Integer key : getKeys(world_map, "I")) {
 			if (key < 45){
 				x_issue = 0;
 				y_issue = key;

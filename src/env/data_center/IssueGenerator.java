@@ -12,7 +12,7 @@ public class IssueGenerator implements Runnable {
   private Logger logger   = Logger.getLogger("jasonTeamSimLocal.mas2j." + WorldModel.class.getName());
 
   protected Random random = new Random();
-  
+
   private static final int SLEEP_TIME = 10000; 
 
   public IssueGenerator(WorldModel newModel, WorldView newView) {
@@ -33,12 +33,19 @@ public class IssueGenerator implements Runnable {
 
   public void generateRandomIssue() {
     Location l = model.getFreePos();
-    if( model.hasObject(WorldModel.OBSTACLE, l.y, l.x) ) {	   
-      model.add(WorldModel.ISSUE, l.y, l.x);
-	    model.setInitialNbIssues(model.getInitialNbIssues()+1);		    
+    if ( model.hasObject(WorldModel.OBSTACLE, l.y, l.x) ) {
+        int i = (int)(Math.random()*100);
+        
+        if ( i > 50 ) {
+            model.add(WorldModel.ISSUE, l.y, l.x);
+        } else {
+            model.add(WorldModel.SWISSUE, l.y, l.x);
+        }
+
+	    model.setInitialNbIssues(model.getInitialNbIssues()+1);
 	    view.update(l.y, l.x);
 	    view.udpateCollectedIssues();
 	    logger.warning("New issue in (" + l.x + "," + l.y + ")!");
-    }    
+    }
   }
 }

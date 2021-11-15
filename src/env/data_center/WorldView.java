@@ -20,11 +20,10 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
 @SuppressWarnings("serial")
 public class WorldView extends GridWorldView {
 
-    DataCenterPlanet env = null;
+    DataCenterPlanet env        = null;
 
     public WorldView(WorldModel model) {
         super(model, "Data Center", 600);
@@ -73,7 +72,7 @@ public class WorldView extends GridWorldView {
         msg.setBorder(BorderFactory.createEtchedBorder());
 
         p = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        p.add(new JLabel("Click on the servers to break it and wait for repair."));
+        p.add(new JLabel("Click on the servers to add issues and wait for repair."));
         msg.add(p);
         p = new JPanel(new FlowLayout(FlowLayout.CENTER));
         p.add(new JLabel("(mouse at:"));
@@ -81,7 +80,7 @@ public class WorldView extends GridWorldView {
         p.add(jlMouseLoc);
         msg.add(p);
         p = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        p.add(new JLabel("Fixed servers:"));
+        p.add(new JLabel("Issues resolved:"));
         jIssuesC = new JLabel("0");
         p.add(jIssuesC);
         msg.add(p);
@@ -106,8 +105,14 @@ public class WorldView extends GridWorldView {
                 int lin = e.getY() / cellSizeH;
                 if (col >= 0 && lin >= 0 && col < getModel().getWidth() && lin < getModel().getHeight()) {
                     WorldModel wm = (WorldModel)model;
-                    if (wm.hasObject(WorldModel.OBSTACLE, col, lin)) {
-                        wm.add(WorldModel.ISSUE, col, lin);
+                    if ( wm.hasObject(WorldModel.OBSTACLE, col, lin) ) {
+                        int i = (int)(Math.random()*100);
+                        if (i < 50) {
+                            wm.add(WorldModel.ISSUE, col, lin);
+                        } else {
+                            wm.add(WorldModel.SWISSUE, col, lin);
+                        }
+
                         wm.remove(WorldModel.OBSTACLE, col, lin);
                         wm.setInitialNbIssues(wm.getInitialNbIssues()+1);
                         update(col, lin);
@@ -140,9 +145,11 @@ public class WorldView extends GridWorldView {
 
     @Override
     public void draw(Graphics g, int x, int y, int object) {
+        
         switch (object) {
-        case WorldModel.DEPOT:   drawDepot(g, x, y);  break;
-        case WorldModel.ISSUE:    drawIssue(g, x, y);  break;
+            case WorldModel.DEPOT:  drawDepot(g, x, y);  break;
+            case WorldModel.ISSUE:  drawIssue(g, x, y);  break;
+            case WorldModel.SWISSUE:    drawSWIssue(g, x, y);  break;
         }
     }
 
@@ -183,5 +190,20 @@ public class WorldView extends GridWorldView {
         vy[3] = y * cellSizeH + (cellSizeH / 2);
         g.fillPolygon(vx, vy, 4);
     }
-    
+
+    public void drawSWIssue(Graphics g, int x, int y) {
+        g.setColor(Color.orange);
+        g.drawRect(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
+        int[] vx = new int[4];
+        int[] vy = new int[4];
+        vx[0] = x * cellSizeW + (cellSizeW / 2);
+        vy[0] = y * cellSizeH;
+        vx[1] = (x + 1) * cellSizeW;
+        vy[1] = y * cellSizeH + (cellSizeH / 2);
+        vx[2] = x * cellSizeW + (cellSizeW / 2);
+        vy[2] = (y + 1) * cellSizeH;
+        vx[3] = x * cellSizeW;
+        vy[3] = y * cellSizeH + (cellSizeH / 2);
+        g.fillPolygon(vx, vy, 4);
+    }   
 }

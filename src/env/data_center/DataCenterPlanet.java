@@ -130,6 +130,7 @@ public class DataCenterPlanet extends Artifact {
     }
 
     private static Term issue     = new Atom("issue");
+    private static Term swissue   = new Atom("swissue");
     private static Term obstacle  = new Atom("obstacle");
 
     private void updateAgPercept(int x, int y) {
@@ -140,9 +141,11 @@ public class DataCenterPlanet extends Artifact {
             removeObsPropertyByTemplate("cell", null, null, null);
         } catch (IllegalArgumentException e) {}
 
-        if (model.hasObject(WorldModel.ISSUE, x, y)) {
+        if ( model.hasObject(WorldModel.ISSUE, x, y) ) {
             defineObsProperty("cell", x, y, issue);
-        } else if (model.hasObject(WorldModel.OBSTACLE, x, y)) {
+        } else if ( model.hasObject(WorldModel.SWISSUE, x, y) ) {
+            defineObsProperty("cell", x, y, swissue);
+        } else if ( model.hasObject(WorldModel.OBSTACLE, x, y) ) {
             defineObsProperty("cell", x, y, obstacle);
         }
     }
