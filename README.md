@@ -20,7 +20,7 @@ In this window, we can see our environment as a grid of cells.
 
 [![](images/world.png)](images/world.png)
 
-- **<span style="color: red;">Red</span>**: Hardware issues.
+- **<font color=red>Red</font>**: Hardware issues.
 - **<span style="color: orange;">Orange</span>**: Software issues.
 - **<span style="color: dimgray;">Dark Gray</span>**: Servers.
 - **White**: Free cells visited by the agents.
