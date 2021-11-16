@@ -1,6 +1,6 @@
 # MAS Data Center
 
-This projecta contains a Multi-Agent System (MAS) that simulates the data center environment.
+This project contains a Multi-Agent System (MAS) that simulates the data center environment.
 
 It's my term project for the Multi-Agent Systems course at [PUCRS](https://www.pucrs.br/).
 
@@ -11,6 +11,35 @@ It's my term project for the Multi-Agent Systems course at [PUCRS](https://www.p
 ## Demo
 
 ![](images/demo.gif)
+
+## Screens
+
+### World
+
+In this window, we can see our environment as a grid of cells.
+
+[![](images/world.png)](images/world.png)
+
+- **<span style="color: red;">Red</span>**: Hardware issues.
+- **<span style="color: orange;">Orange</span>**: Software issues.
+- **<span style="color: dimgray;">Dark Gray</span>**: Servers.
+- **White**: Free cells visited by the agents.
+- **<span style="color: gray;">Light Gray</span>**: Free cells unvisited by the agents.
+- **<span style="color: green;">Green</span>**: Command Center
+
+The agents can move in the grid, when they are free they will be colored in blue, when they are carrying a hardware component or software they will be colored in gray.
+
+### Logs
+
+In this window, we can see the logs of each agent, the world, the manager, and so on.
+
+[![](images/logs.png)](images/logs.png)
+
+### Organisation Inspector
+
+In this window, we can see the organisation of the agents.
+
+[![](images/org_inspector.png)](images/org_inspector.png)
 
 ## How to run
 
