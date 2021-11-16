@@ -20,12 +20,12 @@ In this window, we can see our environment as a grid of cells.
 
 [![](images/world.png)](images/world.png)
 
-- **<font color=red>Red</font>**: Hardware issues.
-- **<span style="color: orange;">Orange</span>**: Software issues.
-- **<span style="color: dimgray;">Dark Gray</span>**: Servers.
+- **Red**: Hardware issues.
+- **Orange**: Software issues.
+- **Dark Gray**: Servers.
 - **White**: Free cells visited by the agents.
-- **<span style="color: gray;">Light Gray</span>**: Free cells unvisited by the agents.
-- **<span style="color: green;">Green</span>**: Command Center
+- **Light Gray**: Free cells unvisited by the agents.
+- **Green**: Command Center
 
 The agents can move in the grid, when they are free they will be colored in blue, when they are carrying a hardware component or software they will be colored in gray.
 
