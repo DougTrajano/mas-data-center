@@ -30,13 +30,13 @@ douglas.trajano@edu.pucrs.br\\
 \maketitle
 \begin{abstract}
 \begin{quote}
-In this paper, we introduce a multi-agent system in a data center environment. The system is composed of different types of agents, each of which has its own artifact, and the system is designed to solve all issues in the data center environment. The agents walk around the data center searching for issues, when they find an issue, they will try to solve it. The system is designed to solve all issues in the data center environment.
+In this paper, we introduce a multi-agent system in a data center environment. The system is composed of different types of agents, each of which has its artifact, and the system is designed to solve all issues in the data center environment. The agents walk around the data center searching for issues, when they find an issue, they will try to solve it. The system is designed to solve all issues in the data center environment.
 \end{quote}
 \end{abstract}
 
 \section{Introduction}
 
-Nowadays, IT operations are crucial for business continuity. Information systems are used by companies in different processes and products, all these services are implemented in data centers. Critical incidents in data centers may impact the usability of these services and it needs to be handled in timely fashion by the engineering team to avoid financial losses or affect their end-users.
+Nowadays, IT operations are crucial for business continuity. Information systems are used by companies in different processes and products, all these services are implemented in data centers. Critical incidents in data centers may impact the usability of these services and it needs to be handled in a timely fashion by the engineering team to avoid financial losses or affect their end-users.
 
 A data center is a building composed of computer systems, storage systems, infrastructure for power supply, telecommunications, environmental controls (e.g., air conditioning, fire suppression), and many other associated components. The complexity of these resources lies in the fact that all these components need to work together, if one of these components has an issue, it can affect other components. Engineers need to solve these issues in a timely fashion.
 
@@ -66,7 +66,7 @@ Our approach is based on the following three steps:
 
 \subsection{Environment}
 
-Our environment simulates a data center plant. It has several racks, and each rack has several servers. The cells with servers are marked as "gray" and the agents does not move to these cells until the servers are broken. Cells with hardware issues are marked as "red" and cells with software issues are marked as "orange". When an agent tries to solve an issue, it will move to these cells. Free cells are marked as "white" and the agents can move to these cells. In the Figure 3.1, we can see the map that represents the environment.
+Our environment simulates a data center plant. It has several racks, and each rack has several servers. The cells with servers are marked as "gray" and the agents do not move to these cells until the servers are broken. Cells with hardware issues are marked as "red" and cells with software issues are marked as "orange". When an agent tries to solve an issue, it will move to these cells. Free cells are marked as "white" and the agents can move to these cells. In Figure 3.1, we can see the map that represents the environment.
 
 \begin{figure}[ht]
     \centering
@@ -77,11 +77,11 @@ Our environment simulates a data center plant. It has several racks, and each ra
 
 \subsection{Problem}
 
-The problem that our agents are trying to solve is to find all the issues in the data center environment. For that, agents will walk around the environment and try to find issues. When an agent finds an issue, it will try to solve it. If all the issues are solved, the agents still walk around searching for new issues as we can interact with the environment in real time adding new issues.
+The problem that our agents are trying to solve is to find all the issues in the data center environment. For that, agents will walk around the environment and try to find issues. When an agent finds an issue, it will try to solve it. If all the issues are solved, the agents still walk around searching for new issues as we can interact with the environment in real-time adding new issues.
 
 \subsection{Agents}
 
-Basically, we have two types of agents, the manager and the workers, for the workers, we will have different goals and behaviours.
+Basically, we have two types of agents, the manager, and the technicians. For technician agents we will have different goals and beliefs.
 
 The \textbf{manager} is responsible for coordinating the workers, it isn't visible in the environment, but it will manage the team scores. We introduced the concept of teams. Currently, each team has only one agent, but we can add more agents for these teams. In the end, the manager will say the team that has the highest score.
 
@@ -93,13 +93,13 @@ We also have the concept of the team. In our experiments, we added one agent per
 
 We developed one scenario to test our Multi-Agent System. This scenario starts with 3 software issues and 19 hardware issues. We also can add more issues by clicking in a server in the world interface, when we add an issue manually, the issue type (hardware or software) will be defined randomly.
 
-Our agents starts walking around the world and try to find and solve the issues.When all issues are solved, the agents still have to walk around the world because new issues can be occurred.
+Our agents start walking around the world and try to find and solve the issues. When all issues are solved, the agents still have to walk around the world because new issues can occur.
 
 \section{Discussion, Conclusion, and Future Works}\label{sec:conclusions}
 
-In this work, we can conclude that we can build a Multi-Agent System to control autonomous agents in a data center world.
+We can conclude that we can introduce a Multi-Agent System that controls autonomous agents in a data center world.
 
-For future work, we want to specify different types of issues handled by each agent and define if agent should return to the command center or not based on the issue type. We also can add more components in the infrastructure such as network devices, air conditioning, and so on.
+As we discussed in the Introduction section, data centers are complex resources. So, for future work, we want to specify more the different types of issues that each agent can handle, we also want to define if the agent should return to the command center or not based on the issue type. We can add more components to the infrastructure such as network devices, air conditioning, and so on.
 
 \bibliographystyle{aaai}
 \bibliography{references.bib}
