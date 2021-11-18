@@ -50,15 +50,7 @@ Modern software applications have to deal with an increasing level of autonomy o
 
 As the name says, Multi-Agent Systems (MAS) are systems made up of multiple agents. It has the capacity to build and understand a wide range of artificial social systems and can be applied in several different areas.\cite{wooldridge2009introduction}
 
-JaCaMo \cite{boissier2013multi} is a multi-agent systems development platform that enables integration of three multi-agent programming dimensions: agents, organisations, and environment. A JaCaMo system, as shown in Figure 2.1, consists of the following platforms: Jason \cite{bordini2007programming} for agent development, CArtAgO \cite{bordini2009multi} for environment programming, and Moise \cite{hubner2007developing} for programming organisations. Therefore, JaCaMo integrates these three platforms for a uniform and consistent programming model, with the goal of simplifying the combination of these dimensions when programming multi-agent systems \cite{boissier2013multi}.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=8cm]{images/jacamo_overview.png}
-    \caption{Overview of a JaCaMo Multi-Agent System}
-    \cite{boissier2013multi}
-    \label{fig:jacamo-overview}
-\end{figure}
+JaCaMo \cite{boissier2013multi} is a multi-agent systems development platform that enables integration of three multi-agent programming dimensions: agents, organisations, and environment. A JaCaMo system consists of the following platforms: Jason \cite{bordini2007programming} for agent development, CArtAgO \cite{bordini2009multi} for environment programming, and Moise \cite{hubner2007developing} for programming organisations. Therefore, JaCaMo integrates these three platforms for a uniform and consistent programming model, with the goal of simplifying the combination of these dimensions when programming multi-agent systems \cite{boissier2013multi}.
 
 \section{Approach}\label{sec:approach}
 
@@ -94,6 +86,26 @@ We also have the concept of the team. In our experiments, we added one agent per
 We developed one scenario to test our Multi-Agent System. This scenario has 410 servers in 400 racks. It starts with 3 software issues and 19 hardware issues. We also can add more issues by clicking in a server in the world interface, when we add an issue manually, the issue type (hardware or software) will be defined randomly.
 
 Our agents start walking around the world and try to find and solve the issues. When all issues are solved, the agents still have to walk around the world because new issues can occur.
+
+To evaluate the system, we defined a timebox of 30 seconds. Then, we run the system 5 times and take the average of the results. In the following table, we show the results of the system for the 5 runs.
+
+\begin{center}
+ \begin{tabular}{||c|c|c||} 
+ \hline
+ Run ID & Fixed issues \\
+ \hline
+ 1 & 9/19 \\
+ \hline
+ 2 & 5/19 \\
+ \hline
+ 3 & 8/19 \\
+ \hline
+ 4 & 7/19 \\
+ \hline
+ 5 & 8/19 \\
+ \hline
+\end{tabular}
+\end{center}
 
 \section{Discussion, Conclusion, and Future Works}\label{sec:conclusions}
 
